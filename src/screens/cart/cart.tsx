@@ -1,14 +1,14 @@
 import React from 'react';
-import { View, Text, Button, Image, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { decrement, increment } from '../../redux/cartSlice';
 
 interface Product {
-    id: string;
-    img: string;
-    name: string;
-    price: number;
-    quantity: number;
+    id: number,
+    name: string,
+    price: number,
+    img: string,
+    quantity: number,
 }
 
 interface CartState {
@@ -21,11 +21,11 @@ const Cart: React.FC = () => {
     const dispatch = useDispatch();
     const { items } = useSelector((state: CartState) => state.cart);
 
-    const handleIncrement = (product: any) => {
+    const handleIncrement = (product: Product) => {
         dispatch(increment(product));
     };
 
-    const handleDecrement = (product: any) => {
+    const handleDecrement = (product: Product) => {
         dispatch(decrement(product));
     };
 
@@ -34,7 +34,7 @@ const Cart: React.FC = () => {
         items.forEach((product: Product) => {
             total += product.price * product.quantity;
         });
-        return total;
+        return Math.round(total * 100) / 100;
     };
 
     return (
@@ -48,9 +48,13 @@ const Cart: React.FC = () => {
                             <Text style={styles.productPrice}>${product.price}</Text>
                         </View>
                         <View style={styles.quantityContainer}>
-                            <Button title="-" onPress={() => handleDecrement(product)} />
-                            <Text>{product.quantity}</Text>
-                            <Button title="+" onPress={() => handleIncrement(product)} />
+                            <TouchableOpacity style={styles.quantityButton} onPress={() => handleDecrement(product)}>
+                                <Text style={styles.buttonText}>-</Text>
+                            </TouchableOpacity>
+                            <Text style={styles.quantityText}>{product.quantity}</Text>
+                            <TouchableOpacity style={styles.quantityButton} onPress={() => handleIncrement(product)}>
+                                <Text style={styles.buttonText}>+</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 ))
@@ -65,20 +69,26 @@ const Cart: React.FC = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20,
+        padding: 15,
         backgroundColor: '#f8f8f8',
     },
     cartItem: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 10,
+        marginBottom: 15,
         backgroundColor: '#fff',
         padding: 10,
         borderRadius: 10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.3,
+        shadowRadius: 2,
+        elevation: 5,
     },
     image: {
         width: 80,
         height: 80,
+        borderRadius: 10,
         marginRight: 10,
     },
     productInfo: {
@@ -94,6 +104,21 @@ const styles = StyleSheet.create({
     quantityContainer: {
         flexDirection: 'row',
         alignItems: 'center',
+    },
+    quantityButton: {
+        backgroundColor: '#841584',
+        padding: 5,
+        borderRadius: 5,
+    },
+    quantityText: {
+        marginHorizontal: 10,
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 18,
+        fontWeight: 'bold',
     },
     total: {
         marginTop: 20,
