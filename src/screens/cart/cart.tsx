@@ -42,7 +42,7 @@ const Cart: React.FC = () => {
             {items && items.length > 0 ? (
                 items.map((product: Product) => (
                     <View key={product.id} style={styles.cartItem}>
-                        <Image source={{ uri: product.img }} style={styles.image} />
+                        <Image source={{ uri: product.img }} style={styles.image} resizeMode='contain' />
                         <View style={styles.productInfo}>
                             <Text style={styles.productName}>{product.name}</Text>
                             <Text style={styles.productPrice}>${product.price}</Text>
@@ -61,7 +61,12 @@ const Cart: React.FC = () => {
             ) : (
                 <Text style={styles.noDataText}>No items in cart</Text>
             )}
-            {items && items.length > 0 && <Text style={styles.total}>Total: ${calculateTotalAmount()}</Text>}
+            {items && items.length > 0 && (
+                <View style={styles.totalContainer}>
+                    <Text style={styles.totalText}>Total:</Text>
+                    <Text style={styles.totalAmount}>${calculateTotalAmount()}</Text>
+                </View>
+            )}
         </View>
     );
 };
@@ -97,6 +102,7 @@ const styles = StyleSheet.create({
     productName: {
         fontSize: 18,
         marginBottom: 5,
+        fontFamily:"OpenSans-Regular"
     },
     productPrice: {
         color: 'gray',
@@ -114,23 +120,50 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         fontSize: 16,
         fontWeight: 'bold',
+        fontFamily:"OpenSans-Regular"
     },
     buttonText: {
         color: 'white',
         fontSize: 18,
         fontWeight: 'bold',
+        fontFamily:"OpenSans-Regular"
     },
     total: {
         marginTop: 20,
         fontSize: 24,
         fontWeight: 'bold',
         textAlign: 'center',
+        fontFamily:"OpenSans-Regular"
     },
     noDataText: {
         textAlign: 'center',
         marginTop: 20,
         fontSize: 18,
         color: 'gray',
+    },
+    totalContainer: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: '#fff',
+        paddingVertical: 20,
+        paddingHorizontal: 15,
+        borderTopWidth: 1,
+        borderTopColor: 'gray',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    totalText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    totalAmount: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#841584',
+        fontFamily:"OpenSans-Regular"
     },
 });
 

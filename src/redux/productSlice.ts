@@ -1,5 +1,5 @@
 
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 // Define the shape of our state
@@ -15,12 +15,22 @@ const initialState: ProductState = {
   error: null,
   loading:false
 };
-
-export const fetchProducts = createAsyncThunk('products/fetchProducts', async () => {
-  const response = await axios.get('https://my-json-server.typicode.com/benirvingplt/products/products');
-  // console.log("response",response.data)
-  return response.data;
-});
+interface Product {
+  id: number;
+  title: string;
+  price: number;
+}
+export const fetchProducts = createAsyncThunk<Product[], void>(
+  'products/fetchProducts',
+  async () => {
+    try {
+      const response = await axios.get<Product[]>('https://my-json-server.typicode.com/benirvingplt/products/products');
+      return response.data;
+    } catch (error) {
+      throw new Error('API error');
+    }
+  }
+);
 
 const productSlice = createSlice({
   name: 'products',
@@ -30,8 +40,9 @@ const productSlice = createSlice({
     builder
       .addCase(fetchProducts.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
-      .addCase(fetchProducts.fulfilled, (state, action) => {
+      .addCase(fetchProducts.fulfilled, (state, action: PayloadAction<Product[]>) => {
         state.loading = false;
         state.products = action.payload;
       })

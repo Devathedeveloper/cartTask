@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 import { Provider } from 'react-redux';
-import Cart from './cart';  // Import your Cart component
+import Cart from './cart'; 
 import { combineReducers, configureStore, legacy_createStore as createStore } from '@reduxjs/toolkit';
 import { rootReducer } from '../../redux/store';
 import cartReducer from '../../redux/cartSlice';
@@ -45,7 +45,7 @@ test('increments item quantity when "+" button is pressed', async () => {
   );
 
   fireEvent.press(getAllByText('+')[0]);
-  const quantityElement = await findByText('3');  // assuming initial quantity was 2
+  const quantityElement = await findByText('3');  
   expect(quantityElement).toBeTruthy();
 });
 
@@ -63,7 +63,7 @@ test('decrements item quantity when "-" button is pressed', async () => {
   );
 
   fireEvent.press(getAllByText('-')[0]);
-  const quantityElement = await findByText('1');  // assuming initial quantity was 2
+  const quantityElement = await findByText('1');
   expect(quantityElement).toBeTruthy();
 });
 
@@ -81,6 +81,6 @@ test('calculates total amount correctly', () => {
     </Provider>,
   );
 
-  const totalElement = getByText(`Total: $20`);
+  const totalElement = getByText(`$20`);
   expect(totalElement).toBeTruthy();
 });
